@@ -1,3 +1,31 @@
-uploads/
-mysql_data/
+# User uploads
+public/uploads/*
+!public/uploads/.gitkeep
+
+# Secrets / Env
 .env
+.env.local
+
+# Logs
+*.log
+logs/
+
+# OS files
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+*~
+
+# IDE
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# Docker
+mysql_data/
+
+# Temporary files
+*.tmp
+*.bak
