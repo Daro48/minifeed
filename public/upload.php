@@ -29,9 +29,6 @@ $origDir  = $baseDir . '/original';
 
 $filename = uniqid() . '.mp4';
 
-/* =========================
-   BILDER
-   ========================= */
 if (str_starts_with($mime, 'image/')) {
 
     move_uploaded_file($file['tmp_name'], "$imageDir/$filename");
@@ -45,9 +42,6 @@ if (str_starts_with($mime, 'image/')) {
     exit;
 }
 
-/* =========================
-   VIDEOS
-   ========================= */
 if ($mime === 'video/mp4') {
 
     $origPath = "$origDir/$filename";

@@ -2,7 +2,6 @@
 session_start();
 require_once __DIR__ . '/../src/db.php';
 
-// Feed laden
 $stmt = $pdo->query("
     SELECT posts.*, users.name 
     FROM posts
@@ -18,99 +17,8 @@ $posts = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <meta charset="UTF-8">
     <title>Feed</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="assets/style.css">
 
-    <style>
-        body {
-            margin: 0;
-            background: #fafafa;
-            font-family: Arial, sans-serif;
-        }
-
-        .topbar {
-            position: sticky;
-            top: 0;
-            background: white;
-            padding: 15px;
-            border-bottom: 1px solid #ddd;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            z-index: 10;
-        }
-
-        .feed {
-            max-width: 600px;
-            margin: 0 auto;
-            padding: 20px 10px;
-            overflow-y: auto;
-            overflow-x: hidden;
-        }
-
-        .feed::-webkit-scrollbar {
-            width: 8px;
-        }
-
-        .feed::-webkit-scrollbar-track {
-            background: #f1f1f1;
-            border-radius: 10px;
-        }
-
-        .feed::-webkit-scrollbar-thumb {
-            background: #888;
-            border-radius: 10px;
-        }
-
-        .feed::-webkit-scrollbar-thumb:hover {
-            background: #555;
-        }
-
-        .post {
-            background: white;
-            margin-bottom: 25px;
-            border-radius: 10px;
-            overflow: hidden;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-        }
-
-        .post-header {
-            padding: 10px;
-            font-weight: bold;
-        }
-
-        .post img,
-        .post video {
-            width: 100%;
-            display: block;
-        }
-
-        .post video {
-            max-height: 500px;
-            min-height: 200px;
-            object-fit: contain;
-            background: #000;
-        }
-
-        .post-footer {
-            padding: 10px;
-            font-size: 12px;
-            color: #666;
-        }
-
-        .upload-box {
-            max-width: 600px;
-            margin: 20px auto;
-            background: white;
-            padding: 15px;
-            border-radius: 10px;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-        }
-
-        .upload-box input,
-        .upload-box button {
-            width: 100%;
-            margin-top: 10px;
-        }
-    </style>
     <script>
         function setFeedHeight() {
             const feed = document.querySelector('.feed');
@@ -119,8 +27,12 @@ $posts = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
             const windowHeight = window.innerHeight;
             const topbarHeight = topbar.offsetHeight;
-            const uploadBoxHeight = uploadBox.offsetHeight;
-            const margin = 20; // Zusätzlicher Abstand
+            const margin = 20;
+
+            let uploadBoxHeight = 0;
+            if (uploadBox && uploadBox.classList.contains('show')) {
+                uploadBoxHeight = uploadBox.offsetHeight;
+            }
 
             const feedHeight = windowHeight - topbarHeight - uploadBoxHeight - margin;
             feed.style.height = feedHeight + 'px';
@@ -129,30 +41,34 @@ $posts = $stmt->fetchAll(PDO::FETCH_ASSOC);
         window.addEventListener('load', setFeedHeight);
         window.addEventListener('resize', setFeedHeight);
 
-        // Video-Management: Nur ein Video gleichzeitig
+        document.addEventListener('DOMContentLoaded', function() {
+            const addButton = document.querySelector('.add_button button');
+            const uploadBox = document.querySelector('.upload-box');
+
+            if (addButton && uploadBox) {
+                addButton.addEventListener('click', function() {
+                    uploadBox.classList.toggle('show');
+                    setFeedHeight();
+                });
+            }
+        });
+
         document.addEventListener('DOMContentLoaded', function() {
             const videos = document.querySelectorAll('.post-video');
 
             videos.forEach(function(video) {
-                // Wenn ein Video startet, stoppe alle anderen
                 video.addEventListener('play', function() {
                     videos.forEach(function(otherVideo) {
                         if (otherVideo !== video && !otherVideo.paused) {
                             otherVideo.pause();
-                            otherVideo.currentTime = 0; // Zurück zum Anfang
+                            otherVideo.currentTime = 0;
                         }
                     });
                 });
 
-                // Optional: Video automatisch starten, wenn es sichtbar wird
-                // (Intersection Observer für Auto-Play beim Scrollen)
                 const observer = new IntersectionObserver(function(entries) {
                     entries.forEach(function(entry) {
-                        if (entry.isIntersecting) {
-                            // Video ist sichtbar - optional auto-play
-                            // entry.target.play().catch(() => {}); // Auskommentiert, da User es manuell starten soll
-                        } else {
-                            // Video ist nicht sichtbar - stoppe es
+                        if (!entry.isIntersecting) {
                             if (!entry.target.paused) {
                                 entry.target.pause();
                                 entry.target.currentTime = 0;
@@ -160,7 +76,7 @@ $posts = $stmt->fetchAll(PDO::FETCH_ASSOC);
                         }
                     });
                 }, {
-                    threshold: 0.5 // Video muss zu 50% sichtbar sein
+                    threshold: 0.5
                 });
 
                 observer.observe(video);
@@ -180,6 +96,9 @@ $posts = $stmt->fetchAll(PDO::FETCH_ASSOC);
         <?php endif; ?>
     </div>
 
+    <div class="add_button">
+        <button>+</button>
+    </div>
 
     <?php if (isset($_SESSION['user_id'])): ?>
         <div class="upload-box">
@@ -215,8 +134,7 @@ $posts = $stmt->fetchAll(PDO::FETCH_ASSOC);
                     <img src="/image.php?file=<?= urlencode($post['file_path']) ?>"
                         alt="Bild von <?= htmlspecialchars($post['name']) ?>"
                         loading="lazy"
-                        decoding="async"
-                        style="width: 100%; height: auto; display: block;">
+                        decoding="async">
                 <?php elseif ($post['file_type'] === 'video'): ?>
                     <?php
                     $videoPath = "/uploads/videos/" . htmlspecialchars($post['file_path']);

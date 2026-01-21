@@ -10,7 +10,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $error = "Bitte alle Felder ausfüllen!";
     } else {
         try {
-            // Prüfen ob Benutzername bereits existiert
             $stmt = $pdo->prepare("SELECT id FROM users WHERE name = ?");
             $stmt->execute([$username]);
 
@@ -19,13 +18,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             } else {
                 $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
 
-                // Nur name und password einfügen, keine email mehr
                 $stmt = $pdo->prepare(
                     "INSERT INTO users (name, password) VALUES (?, ?)"
                 );
                 $stmt->execute([$username, $hashedPassword]);
 
-                // Weiterleitung VOR HTML-Output
                 header("Location: index.php?success=1");
                 exit();
             }

@@ -1,13 +1,11 @@
 <?php
 session_start();
 
-// Wenn bereits eingeloggt, direkt zur Homepage
 if (isset($_SESSION['user_id'])) {
     header('Location: homepage.php');
     exit();
 }
 
-// Login-Verarbeitung
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $host = getenv('DB_HOST') ?: 'db';
     $dbname = getenv('DB_NAME') ?: 'users_db';
@@ -21,19 +19,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $username = $_POST['username'];
         $userPassword = $_POST['password'];
 
-        // User aus Datenbank holen
         $stmt = $pdo->prepare("SELECT id, name, password FROM users WHERE name = :username");
         $stmt->execute([':username' => $username]);
         $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
-        // Passwort überprüfen
         if ($user && password_verify($userPassword, $user['password'])) {
-            // Login erfolgreich - Session starten
             $_SESSION['user_id'] = $user['id'];
             $_SESSION['user_name'] = $user['name'];
-            // E-Mail nicht mehr in Session speichern
 
-            // Weiterleitung zur Homepage
             header('Location: homepage.php');
             exit();
         } else {

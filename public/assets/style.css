@@ -1,0 +1,414 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background: #0a0e27;
+    background-image: 
+        radial-gradient(at 20% 30%, #1a1f3a 0%, transparent 50%),
+        radial-gradient(at 80% 70%, #2d1b3d 0%, transparent 50%);
+    min-height: 100vh;
+    color: #e0e0e0;
+}
+
+.topbar {
+    position: sticky;
+    top: 0;
+    background: rgba(10, 14, 39, 0.85);
+    backdrop-filter: blur(20px);
+    padding: 18px 30px;
+    border-bottom: 1px solid rgba(255, 107, 53, 0.2);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    z-index: 100;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+}
+
+.topbar div {
+    font-size: 22px;
+    font-weight: 700;
+    background: linear-gradient(135deg, #ff6b35 0%, #00d9ff 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    letter-spacing: -0.5px;
+}
+
+.topbar a {
+    color: #00d9ff;
+    text-decoration: none;
+    font-weight: 600;
+    padding: 10px 20px;
+    border-radius: 25px;
+    background: rgba(0, 217, 255, 0.1);
+    border: 1px solid rgba(0, 217, 255, 0.3);
+    transition: all 0.3s ease;
+    font-size: 14px;
+}
+
+.topbar a:hover {
+    background: rgba(0, 217, 255, 0.2);
+    border-color: #00d9ff;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(0, 217, 255, 0.3);
+}
+
+.add_button {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 200;
+}
+
+.add_button button {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #ff6b35 0%, #ff8c42 100%);
+    color: white;
+    border: none;
+    font-size: 32px;
+    font-weight: 300;
+    cursor: pointer;
+    box-shadow: 0 6px 25px rgba(255, 107, 53, 0.5);
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
+}
+
+.add_button button:hover {
+    transform: scale(1.1) rotate(90deg);
+    box-shadow: 0 8px 35px rgba(255, 107, 53, 0.7);
+    background: linear-gradient(135deg, #ff8c42 0%, #ff6b35 100%);
+}
+
+.add_button button:active {
+    transform: scale(0.95);
+}
+
+.upload-box {
+    max-width: 600px;
+    margin: 25px auto;
+    background: rgba(26, 31, 58, 0.6);
+    padding: 25px;
+    border-radius: 20px;
+    border: 1px solid rgba(255, 107, 53, 0.2);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(10px);
+    display: none;
+    animation: slideDown 0.3s ease-out;
+}
+
+.upload-box.show {
+    display: block;
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.upload-box form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.upload-box input[type="file"] {
+    padding: 15px;
+    border: 2px dashed rgba(0, 217, 255, 0.3);
+    border-radius: 12px;
+    background: rgba(10, 14, 39, 0.5);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 14px;
+    color: #e0e0e0;
+}
+
+.upload-box input[type="file"]:hover {
+    border-color: #00d9ff;
+    background: rgba(0, 217, 255, 0.1);
+    transform: scale(1.02);
+}
+
+.upload-box button {
+    padding: 14px 28px;
+    background: linear-gradient(135deg, #ff6b35 0%, #ff8c42 100%);
+    color: white;
+    border: none;
+    border-radius: 12px;
+    font-size: 16px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 20px rgba(255, 107, 53, 0.4);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.upload-box button:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 30px rgba(255, 107, 53, 0.6);
+    background: linear-gradient(135deg, #ff8c42 0%, #ff6b35 100%);
+}
+
+.upload-box button:active {
+    transform: translateY(-1px);
+}
+
+.upload-box p {
+    text-align: center;
+    color: #a0a0a0;
+    margin: 0;
+    font-size: 14px;
+}
+
+.upload-box p a {
+    color: #00d9ff;
+    text-decoration: none;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.upload-box p a:hover {
+    color: #ff6b35;
+    text-decoration: underline;
+}
+
+.feed {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 20px 15px 100px 15px;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+.feed::-webkit-scrollbar {
+    width: 10px;
+}
+
+.feed::-webkit-scrollbar-track {
+    background: rgba(26, 31, 58, 0.5);
+    border-radius: 10px;
+}
+
+.feed::-webkit-scrollbar-thumb {
+    background: linear-gradient(180deg, #ff6b35 0%, #00d9ff 100%);
+    border-radius: 10px;
+}
+
+.feed::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(180deg, #ff8c42 0%, #00e5ff 100%);
+}
+
+.feed > p {
+    text-align: center;
+    color: #a0a0a0;
+    padding: 60px 20px;
+    font-size: 18px;
+}
+
+.post {
+    background: rgba(26, 31, 58, 0.7);
+    margin-bottom: 20px;
+    border-radius: 20px;
+    overflow: hidden;
+    border: 1px solid rgba(255, 107, 53, 0.2);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    animation: fadeInScale 0.5s ease-out;
+    transition: all 0.3s ease;
+}
+
+.post:hover {
+    transform: translateY(-5px);
+    border-color: rgba(0, 217, 255, 0.4);
+    box-shadow: 0 12px 40px rgba(0, 217, 255, 0.2);
+}
+
+@keyframes fadeInScale {
+    from {
+        opacity: 0;
+        transform: scale(0.95) translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+    }
+}
+
+.post-header {
+    padding: 18px 25px;
+    font-weight: 700;
+    color: #00d9ff;
+    border-bottom: 1px solid rgba(255, 107, 53, 0.2);
+    background: rgba(10, 14, 39, 0.3);
+    font-size: 16px;
+    letter-spacing: 0.5px;
+}
+
+.post img,
+.post video {
+    width: 100%;
+    display: block;
+    background: #000;
+}
+
+.post video {
+    max-height: 500px;
+    min-height: 200px;
+    object-fit: contain;
+}
+
+.post-footer {
+    padding: 15px 25px;
+    font-size: 12px;
+    color: #7a7a7a;
+    border-top: 1px solid rgba(255, 107, 53, 0.1);
+    background: rgba(10, 14, 39, 0.2);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+@media (max-width: 768px) {
+    .topbar {
+        padding: 12px 15px;
+    }
+
+    .topbar div {
+        font-size: 18px;
+    }
+
+    .topbar a {
+        padding: 8px 16px;
+        font-size: 13px;
+    }
+
+    .add_button {
+        bottom: 15px;
+        right: 15px;
+    }
+
+    .add_button button {
+        width: 56px;
+        height: 56px;
+        font-size: 28px;
+    }
+
+    .upload-box {
+        max-width: calc(100% - 30px);
+        margin: 20px 15px;
+        padding: 20px;
+        border-radius: 15px;
+    }
+
+    .upload-box input[type="file"] {
+        padding: 12px;
+        font-size: 13px;
+    }
+
+    .upload-box button {
+        padding: 12px 24px;
+        font-size: 14px;
+    }
+
+    .feed {
+        padding: 15px 10px 90px 10px;
+        max-width: 100%;
+    }
+
+    .post {
+        border-radius: 15px;
+        margin-bottom: 15px;
+    }
+
+    .post-header {
+        padding: 15px 20px;
+        font-size: 15px;
+    }
+
+    .post-footer {
+        padding: 12px 20px;
+        font-size: 11px;
+    }
+
+    .post video {
+        max-height: 400px;
+        min-height: 200px;
+    }
+}
+
+@media (max-width: 480px) {
+    .topbar {
+        padding: 10px 12px;
+    }
+
+    .topbar div {
+        font-size: 16px;
+    }
+
+    .topbar a {
+        padding: 6px 12px;
+        font-size: 12px;
+    }
+
+    .add_button {
+        bottom: 12px;
+        right: 12px;
+    }
+
+    .add_button button {
+        width: 52px;
+        height: 52px;
+        font-size: 26px;
+    }
+
+    .upload-box {
+        margin: 15px 10px;
+        padding: 15px;
+    }
+
+    .feed {
+        padding: 10px 8px 85px 8px;
+    }
+
+    .post-header {
+        padding: 12px 15px;
+        font-size: 14px;
+    }
+
+    .post-footer {
+        padding: 10px 15px;
+        font-size: 10px;
+    }
+}
+
+@media (hover: none) and (pointer: coarse) {
+    .add_button button:hover {
+        transform: scale(1);
+        rotate: 0deg;
+    }
+
+    .add_button button:active {
+        transform: scale(0.9);
+    }
+
+    .topbar a:hover {
+        transform: none;
+    }
+
+    .post:hover {
+        transform: none;
+    }
+}

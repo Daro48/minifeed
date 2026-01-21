@@ -1,5 +1,4 @@
 <?php
-// Bild-Auslieferung mit korrekten Headern für mobile Geräte
 $file = $_GET['file'] ?? '';
 
 if (empty($file)) {
@@ -7,7 +6,6 @@ if (empty($file)) {
     die('Datei nicht gefunden');
 }
 
-// Sicherheit: Nur Dateien aus dem images-Ordner
 $file = basename($file);
 $imagePath = __DIR__ . '/uploads/images/' . $file;
 
@@ -16,7 +14,6 @@ if (!file_exists($imagePath)) {
     die('Datei nicht gefunden');
 }
 
-// MIME-Type basierend auf Dateiendung bestimmen
 $extension = strtolower(pathinfo($file, PATHINFO_EXTENSION));
 $mimeTypes = [
     'jpg' => 'image/jpeg',
@@ -28,12 +25,10 @@ $mimeTypes = [
 
 $mimeType = $mimeTypes[$extension] ?? 'image/jpeg';
 
-// Headers setzen
 header('Content-Type: ' . $mimeType);
 header('Content-Length: ' . filesize($imagePath));
 header('Cache-Control: public, max-age=31536000');
 header('Access-Control-Allow-Origin: *');
 
-// Bild ausgeben
 readfile($imagePath);
 exit;
